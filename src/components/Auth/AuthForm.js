@@ -56,10 +56,11 @@ const AuthForm = () => {
           throw new Error(data.error.message);
         }
       }).then((data)=>{
-        authCtx.login(data.idToken)
+        const expirationTime=new Date(new Date().getTime()+(+data.expiresIn*1000))
+        authCtx.login(data.idToken,expirationTime.toISOString())
         history.replace('/profile')
       }).catch((err)=>{
-        // console.log(err);
+        console.log(err);
         alert(err)
       })
     // }
