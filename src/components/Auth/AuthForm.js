@@ -1,10 +1,13 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
+import AuthContext from '../../store/auth-context';
 
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [sendingReq,setSendingReq]=useState(false);
+
+  const authCtx=useContext(AuthContext);
 
 
   const emailInputRef=useRef();
@@ -42,7 +45,7 @@ const AuthForm = () => {
         setSendingReq(false)
         if(res.ok){
           // setSendingReq(false)
-          console.log('ok',res.idToken);
+          console.log('ok',res);
           return res.json()
         }else{
             return res.json().then((data)=>{
@@ -52,7 +55,8 @@ const AuthForm = () => {
             })
         }
       }).then((data)=>{
-        console.log(data);
+        authCtx.login(data.idToken)
+        console.log(data.idToken);
       }).catch((err)=>{
         // console.log(err);
         alert(err)
